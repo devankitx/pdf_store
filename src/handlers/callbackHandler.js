@@ -94,7 +94,15 @@ function handleCallback(bot) {
           bot.sendMessage(
             chatId,
             `✅ Payment Verified! Thank you for your purchase.\n\n` +
-              `📄 Here is your PDF: ${pdfs[pdfKey]}`
+            `📄 Here is your PDF: ${pdfs[pdfKey]}\n\n` +
+            `Want to buy another PDF?`,
+            {
+              reply_markup: {
+                inline_keyboard: [
+                  [{ text: "📚 Buy More PDFs", callback_data: "start" }]
+                ]
+              }
+            }
           );
 
           bot.sendMessage(
@@ -107,7 +115,16 @@ function handleCallback(bot) {
           bot.sendMessage(
             chatId,
             "❌ Your payment could not be verified. Please ensure you've sent the correct amount and transaction details.\n\n" +
-              "If you believe this is an error, please contact our support with your reference number."
+            "If you believe this is an error, please contact our support with your reference number.\n\n" +
+            "Would you like to try purchasing again?",
+            {
+              reply_markup: {
+                inline_keyboard: [
+                  [{ text: "🔄 Try Again", callback_data: `buy_${pdfKey}` }],
+                  [{ text: "📚 Choose Different PDF", callback_data: "start" }]
+                ]
+              }
+            }
           );
 
           bot.sendMessage(
