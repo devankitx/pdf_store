@@ -55,9 +55,8 @@ const prices = {
   fullset: "₹3999",
   complete: "₹5999",
 };
-
-// Store pending transactions
 const pendingTransactions = {};
+const userTransactions = {};
 
 // Handle /start command
 bot.onText(/\/start/, (msg) => {
@@ -179,7 +178,7 @@ bot.on("callback_query", async (query) => {
     };
 
     try {
-      await bot.sendPhoto(chatId, QR_CODES[pdfKey] || QR_CODES.chapterwise, {
+      await bot.sendPhoto(chatId, QR_CODES[pdfKey] || QR_CODES.chapter1, {
         caption:
           `📱 Scan this QR code to pay ${prices[pdfKey]}\n\n` +
           `⚠️ IMPORTANT:\n` +
@@ -188,57 +187,12 @@ bot.on("callback_query", async (query) => {
           `2. After payment, send the screenshot or transaction ID here.`,
       });
 
-      bot.once("message", async (msg) => {
-        if (msg.chat.id !== chatId) return;
-
-        const txnId = msg.text;
-        const hasPhoto = msg.photo && msg.photo.length > 0;
-
-        bot.sendMessage(
-          chatId,
-          "⏳ Your payment is being verified. This may take a few minutes..."
-        );
-
-        if (ADMIN_CHAT_ID) {
-          let adminMessage =
-            `🔔 New payment verification needed:\n\n` +
-            `Reference: ${transactionRef}\n` +
-            `Product: ${pdfKey}\n` +
-            `Amount: ${prices[pdfKey]}\n` +
-            `User: @${msg.from.username || "No username"}\n` +
-            `User ID: ${chatId}\n` +
-            `Time: ${new Date().toLocaleString()}\n\n`;
-
-          if (hasPhoto) {
-            await bot.forwardMessage(ADMIN_CHAT_ID, chatId, msg.message_id);
-            await bot.sendMessage(ADMIN_CHAT_ID, adminMessage);
-          } else if (txnId) {
-            adminMessage += `Transaction ID: ${txnId}`;
-            await bot.sendMessage(ADMIN_CHAT_ID, adminMessage);
-          }
-
-          await bot.sendMessage(
-            ADMIN_CHAT_ID,
-            `Verify payment for ${transactionRef}:`,
-            {
-              reply_markup: {
-                inline_keyboard: [
-                  [
-                    {
-                      text: "✅ Approve",
-                      callback_data: `approve_${transactionRef}`,
-                    },
-                    {
-                      text: "❌ Reject",
-                      callback_data: `reject_${transactionRef}`,
-                    },
-                  ],
-                ],
-              },
-            }
-          );
-        }
-      });
+      // Store the transaction reference in a user-specific context
+      if (!userTransactions[chatId]) {
+        userTransactions[chatId] = [];
+      }
+      userTransactions[chatId].push(transactionRef);
+      
     } catch (error) {
       bot.sendMessage(
         chatId,
@@ -298,7 +252,75 @@ bot.on("callback_query", async (query) => {
     );
   }
 });
+// Handle all incoming messages for payment verification
+bot.on("message", async (msg) => {
+  const chatId = msg.chat.id;
+  
+  // Skip if this is a command
+  if (msg.text && msg.text.startsWith('/')) return;
+  
+  // Check if user has pending transactions
+  if (userTransactions[chatId] && userTransactions[chatId].length > 0) {
+    const txnId = msg.text;
+    const hasPhoto = msg.photo && msg.photo.length > 0;
+    
+    // Get the latest transaction reference for this user
+    const transactionRef = userTransactions[chatId][userTransactions[chatId].length - 1];
+    
+    // Only process if the transaction is still pending
+    if (pendingTransactions[transactionRef] && pendingTransactions[transactionRef].status === "pending") {
+      const pdfKey = pendingTransactions[transactionRef].pdfKey;
+      
+      bot.sendMessage(
+        chatId,
+        "⏳ Your payment is being verified. This may take a few minutes..."
+      );
 
+      if (ADMIN_CHAT_ID) {
+        let adminMessage =
+          `🔔 New payment verification needed:\n\n` +
+          `Reference: ${transactionRef}\n` +
+          `Product: ${pdfKey}\n` +
+          `Amount: ${prices[pdfKey]}\n` +
+          `User: @${msg.from.username || "No username"}\n` +
+          `User ID: ${chatId}\n` +
+          `Time: ${new Date().toLocaleString()}\n\n`;
+
+        if (hasPhoto) {
+          await bot.forwardMessage(ADMIN_CHAT_ID, chatId, msg.message_id);
+          await bot.sendMessage(ADMIN_CHAT_ID, adminMessage);
+        } else if (txnId) {
+          adminMessage += `Transaction ID: ${txnId}`;
+          await bot.sendMessage(ADMIN_CHAT_ID, adminMessage);
+        }
+
+        await bot.sendMessage(
+          ADMIN_CHAT_ID,
+          `Verify payment for ${transactionRef}:`,
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "✅ Approve",
+                    callback_data: `approve_${transactionRef}`,
+                  },
+                  {
+                    text: "❌ Reject",
+                    callback_data: `reject_${transactionRef}`,
+                  },
+                ],
+              ],
+            },
+          }
+        );
+      }
+      
+      // Remove this transaction from the user's active list
+      userTransactions[chatId] = userTransactions[chatId].filter(ref => ref !== transactionRef);
+    }
+  }
+});
 // Handle /admin command
 bot.onText(/\/admin/, (msg) => {
   const chatId = msg.chat.id;
