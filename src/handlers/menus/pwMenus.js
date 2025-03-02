@@ -29,8 +29,52 @@ function handlePWMenus(bot, chatId, data, query) {
         },
       }
     );
+  } else if (data === "pw_physics") {
+    bot.sendMessage(
+      chatId,
+      `Select PW Physics chapter (${prices.chapterwise} each):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "Chapter 1", callback_data: "buy_pw_physics_chapter1" }],
+            [{ text: "Chapter 2", callback_data: "buy_pw_physics_chapter2" }],
+            [{ text: "Chapter 3", callback_data: "buy_pw_physics_chapter3" }],
+            [{ text: "Chapter 4", callback_data: "buy_pw_physics_chapter4" }],
+            [{ text: "« Back", callback_data: "select_pw" }],
+          ],
+        },
+      }
+    );
+  } else if (data === "pw_chemistry") {
+    bot.sendMessage(
+      chatId,
+      `Select PW Chemistry chapter (${prices.chapterwise} each):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "Chapter 1", callback_data: "buy_pw_chemistry_chapter1" }],
+            [{ text: "Chapter 2", callback_data: "buy_pw_chemistry_chapter2" }],
+            [{ text: "Chapter 3", callback_data: "buy_pw_chemistry_chapter3" }],
+            [{ text: "Chapter 4", callback_data: "buy_pw_chemistry_chapter4" }],
+            [{ text: "« Back", callback_data: "select_pw" }],
+          ],
+        },
+      }
+    );
+  } else if (data === "pw_complete_set") {
+    bot.sendMessage(
+      chatId,
+      `Get Complete PW Set (${prices.complete_set}):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "Buy Complete Set", callback_data: "buy_pw_complete" }],
+            [{ text: "« Back", callback_data: "select_pw" }],
+          ],
+        },
+      }
+    );
   }
-  // Return true to indicate the handler processed this callback
   return true;
 }
 

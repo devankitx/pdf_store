@@ -102,13 +102,196 @@ function handleCengageMenus(bot, chatId, data, query) {
       }
     );
   } else if (data === "cengage_physics_chapterwise") {
-    // Similar pattern for physics chapters
-    // ... (similar code for other Cengage menus)
+    bot.sendMessage(
+      chatId,
+      `Select Cengage Physics chapter (${prices.chapterwise} each):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Chapter 1",
+                callback_data: "buy_cengage_physics_chapter1",
+              },
+            ],
+            [
+              {
+                text: "Chapter 2",
+                callback_data: "buy_cengage_physics_chapter2",
+              },
+            ],
+            [
+              {
+                text: "Chapter 3",
+                callback_data: "buy_cengage_physics_chapter3",
+              },
+            ],
+            [{ text: "« Back", callback_data: "cengage_physics" }],
+          ],
+        },
+      }
+    );
+  } else if (data === "cengage_chemistry_chapterwise") {
+    bot.sendMessage(
+      chatId,
+      `Select Cengage Chemistry chapter (${prices.chapterwise} each):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Chapter 1",
+                callback_data: "buy_cengage_chemistry_chapter1",
+              },
+            ],
+            [
+              {
+                text: "Chapter 2",
+                callback_data: "buy_cengage_chemistry_chapter2",
+              },
+            ],
+            [
+              {
+                text: "Chapter 3",
+                callback_data: "buy_cengage_chemistry_chapter3",
+              },
+            ],
+            [{ text: "« Back", callback_data: "cengage_chemistry" }],
+          ],
+        },
+      }
+    );
+  } else if (data === "cengage_maths_unitwise") {
+    bot.sendMessage(
+      chatId,
+      `Get Cengage Maths Unit-wise PDF (${prices.unitwise}):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Buy Unit-wise PDF",
+                callback_data: "buy_cengage_maths_unitwise",
+              },
+            ],
+            [{ text: "« Back", callback_data: "cengage_maths" }],
+          ],
+        },
+      }
+    );
+  } else if (data === "cengage_physics_unitwise") {
+    bot.sendMessage(
+      chatId,
+      `Get Cengage Physics Unit-wise PDF (${prices.unitwise}):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Buy Unit-wise PDF",
+                callback_data: "buy_cengage_physics_unitwise",
+              },
+            ],
+            [{ text: "« Back", callback_data: "cengage_physics" }],
+          ],
+        },
+      }
+    );
+  } else if (data === "cengage_chemistry_unitwise") {
+    bot.sendMessage(
+      chatId,
+      `Get Cengage Chemistry Unit-wise PDF (${prices.unitwise}):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Buy Unit-wise PDF",
+                callback_data: "buy_cengage_chemistry_unitwise",
+              },
+            ],
+            [{ text: "« Back", callback_data: "cengage_chemistry" }],
+          ],
+        },
+      }
+    );
+  } else if (data === "cengage_maths_complete") {
+    bot.sendMessage(
+      chatId,
+      `Get Complete Cengage Maths Set (${prices.maths_complete}):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Buy Complete Set",
+                callback_data: "buy_cengage_maths_complete",
+              },
+            ],
+            [{ text: "« Back", callback_data: "cengage_maths" }],
+          ],
+        },
+      }
+    );
+  } else if (data === "cengage_physics_complete") {
+    bot.sendMessage(
+      chatId,
+      `Get Complete Cengage Physics Set (${prices.physics_complete}):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Buy Complete Set",
+                callback_data: "buy_cengage_physics_complete",
+              },
+            ],
+            [{ text: "« Back", callback_data: "cengage_physics" }],
+          ],
+        },
+      }
+    );
+  } else if (data === "cengage_chemistry_complete") {
+    bot.sendMessage(
+      chatId,
+      `Get Complete Cengage Chemistry Set (${prices.chemistry_complete}):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Buy Complete Set",
+                callback_data: "buy_cengage_chemistry_complete",
+              },
+            ],
+            [{ text: "« Back", callback_data: "cengage_chemistry" }],
+          ],
+        },
+      }
+    );
+  } else if (data === "cengage_complete_set") {
+    bot.sendMessage(
+      chatId,
+      `Get Complete Cengage Set of 17 Books PCM (${prices.complete_set}):`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: `Buy Complete Set`,
+                callback_data: "buy_cengage_complete",
+              },
+            ],
+            [{ text: "« Back", callback_data: "select_cengage" }],
+          ],
+        },
+      }
+    );
   }
   // Return true to indicate the handler processed this callback
   return true;
 }
 
 module.exports = {
-  handleCengageMenus
+  handleCengageMenus,
 };

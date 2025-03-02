@@ -39,8 +39,8 @@ function handleCallback(bot) {
     if (data.startsWith("buy_")) {
       const pdfKey = data.split("_").slice(1).join("_");
       
-      // If it's not cengage maths chapter 1 or 2, show coming soon message
-      if (pdfKey !== "cengage_maths_chapter1" && pdfKey !== "cengage_maths_chapter2") {
+      // Check if the PDF is available or coming soon
+      if (pdfs[pdfKey] === "PDF coming soon") {
         bot.sendMessage(chatId, "This content is coming soon! Please check back later.");
         return;
       }
