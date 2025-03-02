@@ -35,10 +35,18 @@ function handleMessage(bot) {
             `🔔 New payment verification needed:\n\n` +
             `Reference: ${transactionRef}\n` +
             `Product: ${pdfKey}\n` +
-            `Amount: ${prices[pdfKey]}\n` +
+            `Amount: ${prices.chapterwise}\n` + // Fixed: Using the correct price
             `User: @${msg.from.username || "No username"}\n` +
             `User ID: ${chatId}\n` +
-            `Time: ${new Date().toLocaleString()}\n\n`;
+            `Time: ${new Date().toLocaleTimeString('en-US', { 
+              timeZone: 'Asia/Kolkata',
+              hour12: true,
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}\n\n`;
 
           if (hasPhoto) {
             await bot.forwardMessage(ADMIN_CHAT_ID, chatId, msg.message_id);

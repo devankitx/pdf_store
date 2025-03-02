@@ -5,7 +5,24 @@ const prices = require("../data/prices");
 const { pendingTransactions, userTransactions } = require("../data/state");
 const { handleCengageMenus } = require("./menus/cengageMenus");
 const { handlePWMenus } = require("./menus/pwMenus");
-
+function getPriceForProduct(pdfKey) {
+  if (pdfKey.includes('chapter')) {
+    return prices.chapterwise;
+  } else if (pdfKey.includes('unitwise')) {
+    return prices.unitwise;
+  } else if (pdfKey.includes('complete')) {
+    if (pdfKey.includes('physics')) {
+      return prices.physics_complete;
+    } else if (pdfKey.includes('chemistry')) {
+      return prices.chemistry_complete;
+    } else if (pdfKey.includes('maths')) {
+      return prices.maths_complete;
+    } else {
+      return prices.complete_set;
+    }
+  }
+  return prices.chapterwise; // default fallback
+}
 function handleCallback(bot) {
   return async (query) => {
     const chatId = query.message.chat.id;
@@ -57,7 +74,7 @@ function handleCallback(bot) {
       try {
         await bot.sendPhoto(chatId, QR_CODES[pdfKey] || QR_CODES.default, {
           caption:
-            `📱 Scan this QR code to pay ${prices.chapterwise}\n\n` +
+            `📱 Scan this QR code to pay ${getPriceForProduct(pdfKey)}\n\n` +
             `⚠️ IMPORTANT:\n` +
             `1. Add this reference number in payment note/description:\n` +
             `${transactionRef}\n\n` +

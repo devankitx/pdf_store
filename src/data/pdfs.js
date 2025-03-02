@@ -1,7 +1,7 @@
 const pdfs = {
-  // Cengage PDFs (only maths ch1 and ch2 available)
-  cengage_maths_chapter1: "https://drive.google.com/file/d/1qnTdXq1WdVlwbhc-FARnXi89w22CKdGf/view?usp=sharing",
-  cengage_maths_chapter2: "https://drive.google.com/file/d/1w_TK6VdUscbmAHevtG82c4bv4wcVQvtv/view?usp=sharing",
+  // Cengage PDFs
+  cengage_maths_chapter1: "PDF coming soon",
+  cengage_maths_chapter2: "PDF coming soon",
   
   // Everything else shows "PDF coming soon"
   cengage_maths_chapter3: "PDF coming soon",
@@ -18,8 +18,8 @@ const pdfs = {
   cengage_chemistry_unitwise: "PDF coming soon",
   cengage_chemistry_complete: "PDF coming soon",
   cengage_complete: "PDF coming soon",
-  pw_maths_chapter1: "PDF coming soon",
-  pw_maths_chapter2: "PDF coming soon",
+  pw_maths_chapter1: "https://drive.google.com/file/d/1qnTdXq1WdVlwbhc-FARnXi89w22CKdGf/view?usp=sharing",
+  pw_maths_chapter2: "https://drive.google.com/file/d/1w_TK6VdUscbmAHevtG82c4bv4wcVQvtv/view?usp=sharing",
   pw_maths_chapter3: "PDF coming soon",
   pw_maths_chapter4: "PDF coming soon",
   pw_physics_chapter1: "PDF coming soon",
